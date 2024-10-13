@@ -1049,7 +1049,7 @@ namespace Decompiler
 
                         gltfModelExporter.Export(resource, outputFile);
 
-                        continue;
+                        //continue;
                     }
 
                     using var contentFile = DecompileResource(resource, fileLoader, progressReporter);
@@ -1071,6 +1071,17 @@ namespace Decompiler
                         outputFile = GetOutputPath(outputFile, useOutputAsDirectory: true);
 
                         DumpContentFile(outputFile, contentFile, allowSubFilesFromExternalRefs);
+
+                        var filePathWithoutExt = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+                        foreach (var additionalFile in contentFile.AdditionalFiles)
+                        {
+                            if (!additionalFile.FileName.Replace('\\', '/')
+                                .StartsWith(filePathWithoutExt.Replace('\\', '/'), StringComparison.Ordinal)) { continue; }
+                            if (additionalFile.Data == null) { continue; }
+
+                            var addiFilePath = GetOutputPath(additionalFile.FileName, useOutputAsDirectory: true);
+                            DumpContentFile(addiFilePath, additionalFile);
+                        }
                     }
                 }
                 catch (Exception e)

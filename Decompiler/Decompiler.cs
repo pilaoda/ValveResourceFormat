@@ -1040,7 +1040,7 @@ namespace Decompiler
                     extension = FileExtract.GetExtension(resource) ?? type[..^2];
 
                     // TODO: This is forcing gltf export - https://github.com/ValveResourceFormat/ValveResourceFormat/issues/782
-                    if (GltfModelExporter.CanExport(resource) && resource.ResourceType != ResourceType.EntityLump)
+                    if (GltfModelExporter.CanExport(resource) && resource.ResourceType != ResourceType.EntityLump && resource.ResourceType != ResourceType.Map)
                     {
                         var outputExtension = GltfExportFormat;
                         var outputFile = Path.Combine(OutputFile, Path.ChangeExtension(filePath, outputExtension));
@@ -1075,8 +1075,7 @@ namespace Decompiler
                         var filePathWithoutExt = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
                         foreach (var additionalFile in contentFile.AdditionalFiles)
                         {
-                            if (!additionalFile.FileName.Replace('\\', '/')
-                                .StartsWith(filePathWithoutExt.Replace('\\', '/'), StringComparison.Ordinal)) { continue; }
+                            if (!additionalFile.isPreExport) { continue; }
                             if (additionalFile.Data == null) { continue; }
 
                             var addiFilePath = GetOutputPath(additionalFile.FileName, useOutputAsDirectory: true);

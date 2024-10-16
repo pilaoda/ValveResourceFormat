@@ -15,6 +15,8 @@ namespace ValveResourceFormat.IO
         /// </summary>
         public byte[] Data { get; set; }
 
+        public bool isPreExport { get; set; }
+
         private string outFileName;
 
         /// <summary>

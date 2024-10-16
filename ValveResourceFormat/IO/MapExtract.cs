@@ -283,6 +283,11 @@ public sealed class MapExtract
             vmap.AdditionalFiles.Add(vmat);
         }
 
+        foreach (var fragment in PreExportedFragments)
+        {
+            fragment.isPreExport = true;
+        }
+
         vmap.AdditionalFiles.AddRange(PreExportedFragments);
         vmap.AdditionalFiles.AddRange(EntityModels);
 

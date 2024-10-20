@@ -546,6 +546,17 @@ namespace Decompiler
                     }
 
                     DumpContentFile(outFilePath, contentFile);
+
+                    var outFileDir = Path.GetDirectoryName(outFilePath);
+
+                    if (Path.GetExtension(outFilePath) == ".vmat")
+                    {
+                        foreach (var additionalFile in contentFile.AdditionalFiles)
+                        {
+                            var addiFilePath = Path.Combine(outFileDir, Path.GetFileName(additionalFile.FileName));
+                            DumpContentFile(addiFilePath, additionalFile);
+                        }
+                    }
                 }
             }
             catch (Exception e)
